@@ -40,7 +40,7 @@ export function TrendingCarousel({ movies }: TrendingCarouselProps) {
         clickable: true,
       }}
       modules={[Autoplay, Pagination]}
-      className="w-full h-[500px] md:h-[700px] overflow-hidden -mt-20"
+      className="w-full h-[360px] sm:h-[440px] md:h-[600px] lg:h-[700px] overflow-hidden"
     >
       {movies.map((movie) => {
         const isTV = (movie as any).name !== undefined && (movie as any).title === undefined;
@@ -64,10 +64,10 @@ export function TrendingCarousel({ movies }: TrendingCarouselProps) {
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2, duration: 0.8 }}
-              className="absolute bottom-[10%] md:bottom-[15%] left-0 right-0 px-8 md:px-16 max-w-2xl"
+              className="absolute bottom-[8%] md:bottom-[12%] left-0 right-0 px-4 sm:px-8 md:px-16 max-w-2xl"
             >
-              <h1 className="text-4xl md:text-7xl font-bold mb-4 leading-tight">{title}</h1>
-              <div className="flex items-center gap-2 mb-6">
+              <h1 className="text-2xl sm:text-4xl md:text-7xl font-bold mb-3 sm:mb-4 leading-tight">{title}</h1>
+              <div className="flex items-center gap-2 mb-4 sm:mb-6">
                 {[...Array(5)].map((_, i) => (
                   <Star
                     key={i}
@@ -78,14 +78,14 @@ export function TrendingCarousel({ movies }: TrendingCarouselProps) {
                     }`}
                   />
                 ))}
-                <span className="ml-2 text-lg font-semibold">{movie.vote_average.toFixed(1)}</span>
+                <span className="ml-2 text-base sm:text-lg font-semibold">{movie.vote_average.toFixed(1)}</span>
               </div>
-              <p className="text-base md:text-lg line-clamp-3 mb-8 text-muted-foreground max-w-xl">
+              <p className="text-sm sm:text-base md:text-lg line-clamp-3 mb-6 sm:mb-8 text-muted-foreground max-w-xl">
                 {movie.overview}
               </p>
-              <div className="flex items-center gap-4">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
                 <Link to={to}>
-                  <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2 px-8 py-6 text-lg rounded-full">
+                  <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2 px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg rounded-full w-full sm:w-auto">
                     <Eye className="w-5 h-5" />
                     View Details
                   </Button>
@@ -93,7 +93,7 @@ export function TrendingCarousel({ movies }: TrendingCarouselProps) {
                 <Button 
                   size="lg" 
                   variant="outline" 
-                  className="gap-2 px-8 py-6 text-lg rounded-full border-2"
+                  className="gap-2 px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg rounded-full border-2 w-full sm:w-auto"
                   onClick={(e) => handleFavoriteToggle(movie, e)}
                 >
                   <Heart className={`w-5 h-5 ${isFavorite(movie.id) ? 'fill-current' : ''}`} />

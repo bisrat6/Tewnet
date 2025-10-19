@@ -81,19 +81,27 @@ export default function TVDetails() {
     <div className="min-h-screen bg-background">
       <Navbar />
 
-      <div className="relative h-[85vh] min-h-[700px] w-full">
-        <img src={getBackdropUrl(tv.backdrop_path, 'original')} alt={tv.name} className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-background/20" />
-        <div className="absolute inset-0 bg-gradient-to-r from-background/60 to-transparent" />
+      <div className="relative w-full h-[60vh] sm:h-[70vh] md:h-[80vh] min-h-[480px] sm:min-h-[560px] md:min-h-[640px] mt-20">
+        <img 
+          src={getBackdropUrl(tv.backdrop_path, 'original')} 
+          alt={tv.name} 
+          className="w-full h-full object-cover object-center" 
+          onError={(e) => {
+            const target = e.currentTarget as HTMLImageElement;
+            if (target.src !== '/placeholder.svg') target.src = '/placeholder.svg';
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-background/70 via-background/30 to-transparent" />
 
-        <div className="absolute inset-0 flex flex-col justify-between p-6 md:p-12 lg:p-16">
+        <div className="absolute inset-0 flex flex-col justify-between p-6 md:p-12 lg:p-16 pt-28 sm:pt-32 md:pt-36">
           <div className="flex-1 flex flex-col justify-center max-w-4xl">
-            <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-5xl md:text-7xl font-bold text-white mb-4 drop-shadow-lg">
+            <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-3xl sm:text-5xl md:text-7xl font-bold text-white mb-3 sm:mb-4 drop-shadow-lg">
               {tv.name}
             </motion.h1>
 
             {tv.tagline && (
-              <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }} className="text-xl text-white/90 italic mb-6 drop-shadow-md">
+              <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }} className="text-base sm:text-xl text-white/90 italic mb-4 sm:mb-6 drop-shadow-md">
                 {tv.tagline}
               </motion.p>
             )}
@@ -104,7 +112,7 @@ export default function TVDetails() {
               ))}
             </motion.div>
 
-            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="text-white/90 text-lg leading-relaxed mb-6 max-w-3xl drop-shadow-md line-clamp-4">
+            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="text-white/90 text-sm sm:text-base md:text-lg leading-relaxed mb-4 sm:mb-6 max-w-3xl drop-shadow-md line-clamp-5">
               {tv.overview}
             </motion.p>
 
@@ -138,22 +146,26 @@ export default function TVDetails() {
             </motion.div>
           </div>
 
-          {credits?.cast && credits.cast.length > 0 && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }} className="pb-8">
-              <h2 className="text-2xl font-bold text-white mb-4">Cast</h2>
-              <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-2">
-                {credits.cast.slice(0, 10).map((actor) => (
-                  <div key={actor.id} className="flex-shrink-0 text-center">
-                    <img src={getProfileUrl(actor.profile_path, 'medium')} alt={actor.name} className="w-20 h-20 md:w-24 md:h-24 object-cover rounded-full mb-2 ring-2 ring-white/20" />
-                    <p className="font-semibold text-sm text-white w-20 md:w-24 line-clamp-1">{actor.name}</p>
-                    <p className="text-xs text-white/70 w-20 md:w-24 line-clamp-1">{actor.character}</p>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          )}
         </div>
       </div>
+
+      {/* Cast Section Below Backdrop */}
+      {credits?.cast && credits.cast.length > 0 && (
+        <div className="container mx-auto px-4 py-8">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }}>
+            <h2 className="text-2xl font-bold mb-4">Cast</h2>
+            <div className="flex gap-4 overflow-x-auto pb-2">
+              {credits.cast.slice(0, 12).map((actor) => (
+                <div key={actor.id} className="flex-shrink-0 text-center">
+                  <img src={getProfileUrl(actor.profile_path, 'medium')} alt={actor.name} className="w-20 h-20 md:w-24 md:h-24 object-cover rounded-full mb-2 ring-2 ring-foreground/10" />
+                  <p className="font-semibold text-sm w-20 md:w-24 line-clamp-1">{actor.name}</p>
+                  <p className="text-xs text-muted-foreground w-20 md:w-24 line-clamp-1">{actor.character}</p>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      )}
 
       <div className="container mx-auto px-4 py-12">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="grid md:grid-cols-2 gap-6 mb-12">
