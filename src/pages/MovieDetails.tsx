@@ -92,7 +92,7 @@ export default function MovieDetails() {
       <Navbar />
 
       {/* Backdrop Section with Overlaid Content */}
-      <div className="relative w-full h-[60vh] sm:h-[70vh] md:h-[80vh] min-h-[480px] sm:min-h-[560px] md:min-h-[640px] mt-20">
+      <div className="relative w-full h-[60vh] sm:h-[70vh] md:h-[80vh] min-h-[480px] sm:min-h-[560px] md:min-h-[640px]">
         <img
           src={getBackdropUrl(movie.backdrop_path, 'original')}
           alt={movie.title}

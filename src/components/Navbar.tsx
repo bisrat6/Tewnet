@@ -73,7 +73,7 @@ export function Navbar() {
           <div className="flex items-center gap-12">
             <Link to="/" className="flex items-center gap-2">
               <Film className="w-8 h-8 text-primary" />
-              <span className="text-3xl font-bold">Tew.<span className='text-yellow-500'>net</span></span>
+              <span className="text-xl sm:text-2xl md:text-3xl font-bold">Tew.<span className='text-yellow-500'>net</span></span>
             </Link>
             <div className="hidden md:flex items-center gap-8">
               <Link
