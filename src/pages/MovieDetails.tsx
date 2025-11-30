@@ -1,6 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
 import { Navbar } from '@/components/Navbar';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
+import { ErrorState } from '@/components/ErrorState';
 import { StarRating } from '@/components/StarRating';
 import { GenreTag } from '@/components/GenreTag';
 import { TrailerModal } from '@/components/TrailerModal';
@@ -25,10 +26,10 @@ export default function MovieDetails() {
   const { id } = useParams<{ id: string }>();
   const movieId = parseInt(id || '0');
 
-  const { data: movie, isLoading } = useMovieDetails(movieId);
-  const { data: credits } = useMovieCredits(movieId);
-  const { data: videos } = useMovieVideos(movieId);
-  const { data: similarMovies } = useSimilarMovies(movieId);
+  const { data: movie, isLoading, error: movieError, refetch: refetchMovie } = useMovieDetails(movieId);
+  const { data: credits, error: creditsError } = useMovieCredits(movieId);
+  const { data: videos, error: videosError } = useMovieVideos(movieId);
+  const { data: similarMovies, error: similarError } = useSimilarMovies(movieId);
 
   const { isFavorite, toggleFavorite } = useFavorites();
   const { isInWatchlist, toggleWatchlist } = useWatchlist();
@@ -38,11 +39,26 @@ export default function MovieDetails() {
   const [trailerOpen, setTrailerOpen] = useState(false);
   const [reviewOpen, setReviewOpen] = useState(false);
 
-  if (isLoading || !movie) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-background">
         <Navbar />
         <LoadingSpinner />
+      </div>
+    );
+  }
+
+  if (movieError || !movie) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navbar />
+        <div className="container mx-auto px-4 py-12">
+          <ErrorState 
+            title="Failed to load movie"
+            message={movieError instanceof Error ? movieError.message : 'Unable to load movie details. Please try again.'}
+            onRetry={() => refetchMovie()}
+          />
+        </div>
       </div>
     );
   }

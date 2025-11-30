@@ -5,6 +5,7 @@ import { CategoryFilter } from '@/components/CategoryFilter';
 import { GenrePills } from '@/components/GenrePills';
 import { SkeletonCard } from '@/components/SkeletonCard';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
+import { ErrorState } from '@/components/ErrorState';
 import { ScrollToTop } from '@/components/ScrollToTop';
 import { usePopularMovies, useTopRatedMovies, useTrendingMovies, useNowPlayingMovies, usePopularTV, useTopRatedTV, useTrendingTV, useOnAirTV } from '@/hooks/useMovies';
 import { useGenres } from '@/hooks/useGenres';
@@ -20,12 +21,12 @@ export default function Home() {
   
   const [pages, setPages] = useState({ trending: 1, popular: 1, topRated: 1, recent: 1 });
   const [activeType, setActiveType] = useState<'movie' | 'tv'>('movie');
-  const { data: trendingData, isLoading: trendingLoading } = activeType === 'movie' ? useTrendingMovies(pages.trending) : useTrendingTV(pages.trending);
-  const { data: popularData, isLoading: popularLoading } = activeType === 'movie' ? usePopularMovies(pages.popular) : usePopularTV(pages.popular);
-  const { data: topRatedData, isLoading: topRatedLoading } = activeType === 'movie' ? useTopRatedMovies(pages.topRated) : useTopRatedTV(pages.topRated);
-  const { data: nowPlayingData, isLoading: nowPlayingLoading } = activeType === 'movie' ? useNowPlayingMovies(pages.recent) : useOnAirTV(pages.recent);
+  const { data: trendingData, isLoading: trendingLoading, error: trendingError, refetch: refetchTrending } = activeType === 'movie' ? useTrendingMovies(pages.trending) : useTrendingTV(pages.trending);
+  const { data: popularData, isLoading: popularLoading, error: popularError, refetch: refetchPopular } = activeType === 'movie' ? usePopularMovies(pages.popular) : usePopularTV(pages.popular);
+  const { data: topRatedData, isLoading: topRatedLoading, error: topRatedError, refetch: refetchTopRated } = activeType === 'movie' ? useTopRatedMovies(pages.topRated) : useTopRatedTV(pages.topRated);
+  const { data: nowPlayingData, isLoading: nowPlayingLoading, error: nowPlayingError, refetch: refetchNowPlaying } = activeType === 'movie' ? useNowPlayingMovies(pages.recent) : useOnAirTV(pages.recent);
   const { data: genres } = useGenres(activeType);
-  const { data: searchData, isLoading: searchLoading } = useSearchMovies(searchQuery);
+  const { data: searchData, isLoading: searchLoading, error: searchError, refetch: refetchSearch } = useSearchMovies(searchQuery);
   
   const [activeCategory, setActiveCategory] = useState('trending');
   const [activeGenre, setActiveGenre] = useState<number | null>(null);
@@ -70,6 +71,14 @@ export default function Home() {
           <div className="h-[500px] md:h-[700px] flex items-center justify-center">
             <LoadingSpinner />
           </div>
+        ) : trendingError ? (
+          <div className="h-[500px] md:h-[700px] flex items-center justify-center px-4">
+            <ErrorState 
+              title="Failed to load trending content"
+              message={trendingError instanceof Error ? trendingError.message : 'Unable to load trending movies. Please try again.'}
+              onRetry={() => refetchTrending()}
+            />
+          </div>
         ) : trendingData?.results && trendingData.results.length > 0 ? (
           <TrendingCarousel movies={trendingData.results.slice(0, 5)} />
         ) : null}
@@ -100,6 +109,12 @@ export default function Home() {
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
                   {Array.from({ length: 10 }).map((_, i) => <SkeletonCard key={i} />)}
                 </div>
+              ) : searchError ? (
+                <ErrorState 
+                  title="Search failed"
+                  message={searchError instanceof Error ? searchError.message : 'Unable to search movies. Please try again.'}
+                  onRetry={() => refetchSearch()}
+                />
               ) : filteredSearchResults && filteredSearchResults.length > 0 ? (
                 <MovieSection title="" movies={filteredSearchResults} />
               ) : (
@@ -144,6 +159,30 @@ export default function Home() {
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6 mb-12">
               {Array.from({ length: 10 }).map((_, i) => <SkeletonCard key={i} />)}
             </div>
+          ) : (activeCategory === 'trending' && trendingError) ? (
+            <ErrorState 
+              title="Failed to load trending content"
+              message={trendingError instanceof Error ? trendingError.message : 'Unable to load trending movies.'}
+              onRetry={() => refetchTrending()}
+            />
+          ) : (activeCategory === 'popular' && popularError) ? (
+            <ErrorState 
+              title="Failed to load popular content"
+              message={popularError instanceof Error ? popularError.message : 'Unable to load popular movies.'}
+              onRetry={() => refetchPopular()}
+            />
+          ) : (activeCategory === 'top-rated' && topRatedError) ? (
+            <ErrorState 
+              title="Failed to load top rated content"
+              message={topRatedError instanceof Error ? topRatedError.message : 'Unable to load top rated movies.'}
+              onRetry={() => refetchTopRated()}
+            />
+          ) : (activeCategory === 'recent' && nowPlayingError) ? (
+            <ErrorState 
+              title="Failed to load recent content"
+              message={nowPlayingError instanceof Error ? nowPlayingError.message : 'Unable to load recent movies.'}
+              onRetry={() => refetchNowPlaying()}
+            />
           ) : (
             <>
               <MovieSection 

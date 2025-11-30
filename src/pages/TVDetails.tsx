@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { Navbar } from '@/components/Navbar';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
+import { ErrorState } from '@/components/ErrorState';
 import { StarRating } from '@/components/StarRating';
 import { GenreTag } from '@/components/GenreTag';
 import { TrailerModal } from '@/components/TrailerModal';
@@ -25,9 +26,9 @@ export default function TVDetails() {
   const { id } = useParams<{ id: string }>();
   const tvId = parseInt(id || '0');
 
-  const { data: tv, isLoading } = useTVDetails(tvId);
-  const { data: credits } = useTVCredits(tvId);
-  const { data: videos } = useTVVideos(tvId);
+  const { data: tv, isLoading, error: tvError, refetch: refetchTV } = useTVDetails(tvId);
+  const { data: credits, error: creditsError } = useTVCredits(tvId);
+  const { data: videos, error: videosError } = useTVVideos(tvId);
 
   const { isFavorite, toggleFavorite } = useFavorites();
   const { isInWatchlist, toggleWatchlist } = useWatchlist();
@@ -37,11 +38,26 @@ export default function TVDetails() {
   const [trailerOpen, setTrailerOpen] = useState(false);
   const [reviewOpen, setReviewOpen] = useState(false);
 
-  if (isLoading || !tv) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-background">
         <Navbar />
         <LoadingSpinner />
+      </div>
+    );
+  }
+
+  if (tvError || !tv) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navbar />
+        <div className="container mx-auto px-4 py-12">
+          <ErrorState 
+            title="Failed to load TV show"
+            message={tvError instanceof Error ? tvError.message : 'Unable to load TV show details. Please try again.'}
+            onRetry={() => refetchTV()}
+          />
+        </div>
       </div>
     );
   }

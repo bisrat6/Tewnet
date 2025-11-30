@@ -7,6 +7,7 @@ import { MovieCard } from '@/components/MovieCard';
 import { MovieGrid } from '@/components/MovieGrid';
 import { SkeletonCard } from '@/components/SkeletonCard';
 import { EmptyState } from '@/components/EmptyState';
+import { ErrorState } from '@/components/ErrorState';
 import { ScrollToTop } from '@/components/ScrollToTop';
 import { useSearchMovies, useSearchTV } from '@/hooks/useSearchMovies';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -27,8 +28,8 @@ export default function Search() {
     minRating?: number;
   }>({});
 
-  const { data: moviesData, isLoading: moviesLoading } = useSearchMovies(searchQuery);
-  const { data: tvData, isLoading: tvLoading } = useSearchTV(searchQuery);
+  const { data: moviesData, isLoading: moviesLoading, error: moviesError, refetch: refetchMovies } = useSearchMovies(searchQuery);
+  const { data: tvData, isLoading: tvLoading, error: tvError, refetch: refetchTV } = useSearchTV(searchQuery);
 
   // Apply filters to results
   const filteredMovieResults = moviesData?.results.filter((movie) => {
@@ -87,6 +88,12 @@ export default function Search() {
                     <SkeletonCard key={i} />
                   ))}
                 </MovieGrid>
+              ) : moviesError ? (
+                <ErrorState 
+                  title="Search failed"
+                  message={moviesError instanceof Error ? moviesError.message : 'Unable to search movies. Please try again.'}
+                  onRetry={() => refetchMovies()}
+                />
               ) : filteredMovieResults && filteredMovieResults.length > 0 ? (
                 <>
                   <p className="text-muted-foreground mb-4">Found {filteredMovieResults.length} movies for "{searchQuery}"</p>
@@ -108,6 +115,12 @@ export default function Search() {
                     <SkeletonCard key={i} />
                   ))}
                 </MovieGrid>
+              ) : tvError ? (
+                <ErrorState 
+                  title="Search failed"
+                  message={tvError instanceof Error ? tvError.message : 'Unable to search TV shows. Please try again.'}
+                  onRetry={() => refetchTV()}
+                />
               ) : filteredTVResults && filteredTVResults.length > 0 ? (
                 <>
                   <p className="text-muted-foreground mb-4">Found {filteredTVResults.length} series for "{searchQuery}"</p>
