@@ -55,7 +55,7 @@ export function MovieCard({ movie }: MovieCardProps) {
       className="group"
     >
       <Link to={isTV ? `/tv/${movie.id}` : `/movie/${movie.id}`}>
-        <Card className="overflow-hidden bg-card/50 backdrop-blur-sm border-border/40 hover:border-primary/50 transition-all duration-300 cursor-pointer relative">
+        <Card className="overflow-hidden bg-gradient-to-br from-card via-card/90 to-card/80 backdrop-blur-sm border-border/40 hover:border-primary/50 transition-all duration-300 cursor-pointer relative shadow-lg hover:shadow-xl hover:shadow-primary/10">
           <div className="aspect-[2/3] relative overflow-hidden">
             <img
               src={getPosterUrl(movie.poster_path, 'medium')}
@@ -67,7 +67,7 @@ export function MovieCard({ movie }: MovieCardProps) {
                 if (target.src !== '/placeholder.svg') target.src = '/placeholder.svg';
               }}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <div className="absolute inset-0 bg-gradient-to-t from-background/50 via-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             
             {/* Floating Bookmark Button */}
             <Button
@@ -81,7 +81,7 @@ export function MovieCard({ movie }: MovieCardProps) {
 
             {/* Rating Badge */}
             <div className="absolute top-3 left-3">
-              <Badge className="bg-primary/90 text-primary-foreground backdrop-blur-sm">
+              <Badge className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground backdrop-blur-sm shadow-lg">
                 {isTV ? 'TV' : 'HD'}
               </Badge>
             </div>

@@ -67,7 +67,7 @@ export function Navbar() {
   }, [searchQuery, debouncedUpdate]);
 
   return (
-    <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border/40">
+    <nav className="sticky top-0 z-50 bg-gradient-to-b from-background via-background/95 to-background/90 backdrop-blur-sm border-b border-border/40">
       <div className="container mx-auto px-6">
         <div className="flex h-20 items-center justify-between">
           <div className="flex items-center gap-12">

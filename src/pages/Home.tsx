@@ -62,10 +62,12 @@ export default function Home() {
   });
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-background/95">
       <Navbar />
       
-      <main>
+      <main className="relative">
+        {/* Decorative gradient overlay */}
+        <div className="fixed inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 pointer-events-none -z-10" />
         {/* Hero Carousel */}
         {trendingLoading ? (
           <div className="h-[500px] md:h-[700px] flex items-center justify-center">

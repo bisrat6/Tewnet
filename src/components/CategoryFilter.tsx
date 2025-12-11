@@ -23,10 +23,10 @@ export function CategoryFilter({ activeCategory, onCategoryChange }: CategoryFil
             <Button
               variant={activeCategory === category.id ? 'default' : 'ghost'}
               onClick={() => onCategoryChange(category.id)}
-              className={`flex items-center gap-2 whitespace-nowrap rounded-full px-6 ${
+              className={`flex items-center gap-2 whitespace-nowrap rounded-full px-6 transition-all ${
                 activeCategory === category.id
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground'
+                  ? 'bg-gradient-to-r from-primary to-primary/80 text-primary-foreground shadow-lg shadow-primary/20'
+                  : 'bg-gradient-to-r from-muted/50 to-muted/30 text-muted-foreground hover:from-muted hover:to-muted/80 hover:text-foreground'
               }`}
             >
               <Icon className="w-4 h-4" />

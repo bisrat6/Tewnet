@@ -15,10 +15,10 @@ export function GenrePills({ genres, activeGenre, onGenreChange }: GenrePillsPro
           <Button
             variant={activeGenre === genre.id ? 'default' : 'outline'}
             onClick={() => onGenreChange(activeGenre === genre.id ? null : genre.id)}
-            className={`whitespace-nowrap rounded-full px-6 ${
+            className={`whitespace-nowrap rounded-full px-6 transition-all ${
               activeGenre === genre.id
-                ? 'bg-secondary text-secondary-foreground'
-                : 'bg-card/50 border-border text-foreground hover:bg-secondary/20'
+                ? 'bg-gradient-to-r from-secondary to-secondary/80 text-secondary-foreground shadow-lg shadow-secondary/20'
+                : 'bg-gradient-to-r from-card/50 to-card/30 border-border text-foreground hover:from-secondary/20 hover:to-secondary/10'
             }`}
           >
             {genre.name}

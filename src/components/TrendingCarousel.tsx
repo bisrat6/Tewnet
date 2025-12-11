@@ -58,8 +58,9 @@ export function TrendingCarousel({ movies }: TrendingCarouselProps) {
                 if (target.src !== '/placeholder.svg') target.src = '/placeholder.svg';
               }}
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-background/30 via-primary/5 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-background/50 via-background/10 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-secondary/5" />
             <motion.div 
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
@@ -85,7 +86,7 @@ export function TrendingCarousel({ movies }: TrendingCarouselProps) {
               </p>
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
                 <Link to={to}>
-                  <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2 px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg rounded-full w-full sm:w-auto">
+                  <Button size="lg" className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground gap-2 px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg rounded-full w-full sm:w-auto shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 transition-all">
                     <Eye className="w-5 h-5" />
                     View Details
                   </Button>
@@ -93,7 +94,7 @@ export function TrendingCarousel({ movies }: TrendingCarouselProps) {
                 <Button 
                   size="lg" 
                   variant="outline" 
-                  className="gap-2 px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg rounded-full border-2 w-full sm:w-auto"
+                  className="gap-2 px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg rounded-full border-2 bg-gradient-to-r from-background/50 to-background/30 hover:from-background/70 hover:to-background/50 backdrop-blur-sm w-full sm:w-auto transition-all"
                   onClick={(e) => handleFavoriteToggle(movie, e)}
                 >
                   <Heart className={`w-5 h-5 ${isFavorite(movie.id) ? 'fill-current' : ''}`} />
